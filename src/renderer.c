@@ -117,6 +117,7 @@ typedef struct RenFont {
   GlyphMap glyphs;
 #ifdef LITE_USE_SDL_RENDERER
   float scale;
+  ERenFontAntialiasing requested_antialiasing;
 #endif
   float size, space_advance;
   unsigned short baseline, height, tab_size;
@@ -476,6 +477,7 @@ RenFont* ren_font_load(const char* path, float size, ERenFontAntialiasing antial
   font->tab_size = 2;
 #ifdef LITE_USE_SDL_RENDERER
   font->scale = 1.0f;
+  font->requested_antialiasing = antialiasing;
 #endif
 
   stream = check_alloc(SDL_calloc(1, sizeof(FT_StreamRec)));
@@ -544,6 +546,17 @@ void ren_font_group_set_size(RenFont **fonts, float size, float surface_scale) {
     fonts[i]->tab_size = 2;
     #ifdef LITE_USE_SDL_RENDERER
     fonts[i]->scale = surface_scale;
+    /* Subpixel (LCD) antialiasing assumes each logical pixel maps to
+       exactly one RGB subpixel triplet. With fractional scaling the
+       pixel grid no longer aligns with the subpixel layout, producing
+       visible color fringing. Fall back to grayscale automatically. */
+    float int_part;
+    float frac = modff(surface_scale, &int_part);
+    bool fractional = frac > 0.001f && frac < 0.999f;
+    if (fractional && fonts[i]->requested_antialiasing == FONT_ANTIALIASING_SUBPIXEL)
+      fonts[i]->antialiasing = FONT_ANTIALIASING_GRAYSCALE;
+    else
+      fonts[i]->antialiasing = fonts[i]->requested_antialiasing;
     #endif
     font_set_face_metrics(fonts[i], fonts[i]->face);
   }
