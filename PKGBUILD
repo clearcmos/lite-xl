@@ -1,12 +1,13 @@
 pkgname=lite-xl-custom
 pkgdesc='A lightweight text editor written in Lua (fork with fractional scaling)'
-pkgver=2.1.8.r4.e880edfb
+pkgver=2.1.8.r0.dfb787c
 pkgrel=1
 arch=('x86_64')
 url='https://github.com/clearcmos/lite-xl'
 license=('MIT')
 depends=(freetype2
          glibc
+         lua
          pcre2
          sdl3)
 makedepends=(git
@@ -23,7 +24,8 @@ pkgver() {
 
 build() {
     arch-meson "$pkgname" build \
-        -Drenderer=true
+        -Drenderer=true \
+        -Duse_system_lua=true
     meson compile -C build
 }
 
