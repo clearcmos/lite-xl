@@ -745,8 +745,8 @@ void ren_draw_rect(RenSurface *rs, RenRect rect, RenColor color) {
 
   SDL_Rect dest_rect = { (int)(rect.x * surface_scale),
                          (int)(rect.y * surface_scale),
-                         (int)(rect.width * surface_scale),
-                         (int)(rect.height * surface_scale) };
+                         (int)ceilf(rect.width * surface_scale),
+                         (int)ceilf(rect.height * surface_scale) };
 
   if (color.a == 0xff) {
     uint32_t translated = SDL_MapSurfaceRGB(surface, color.r, color.g, color.b);

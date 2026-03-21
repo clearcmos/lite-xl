@@ -142,7 +142,7 @@ void renwin_update_rects(RenWindow *ren, RenRect *rects, int count) {
   for (int i = 0; i < count; i++) {
     const RenRect *r = &rects[i];
     const int x = (int)(scale * r->x), y = (int)(scale * r->y);
-    const int w = (int)(scale * r->width), h = (int)(scale * r->height);
+    const int w = (int)ceilf(scale * r->width), h = (int)ceilf(scale * r->height);
     const SDL_Rect sr = {.x = x, .y = y, .w = w, .h = h};
     uint8_t *pixels = ((uint8_t *) ren->rensurface.surface->pixels) + y * ren->rensurface.surface->pitch + x * SDL_BYTESPERPIXEL(ren->rensurface.surface->format);
     SDL_UpdateTexture(ren->texture, &sr, pixels, ren->rensurface.surface->pitch);
