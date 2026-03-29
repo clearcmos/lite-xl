@@ -1,5 +1,13 @@
 # lite-xl (fork)
 
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Workflow
+
+When the user asks to commit/push, check whether CLAUDE.md or README.md need updates to reflect the changes made in the session. Update them in the same commit if so. Only update these files at commit time, not during development.
+
+## Project
+
 Personal fork of [lite-xl](https://github.com/lite-xl/lite-xl) with fractional display scaling support for Wayland/HiDPI.
 
 ## Fork changes
